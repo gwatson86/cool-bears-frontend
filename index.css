@@ -1,0 +1,64 @@
+img {
+    max-width: 300px;
+}
+
+div {
+    padding: 20px;
+}
+
+.bears-list{
+    cursor: pointer;
+}
+
+#login {
+    grid-area: login;
+    color: #ffffff;
+    background-color: #10313b;
+}
+
+#bears {
+    grid-area: bears;
+    background-color: #e4e4e6;
+}
+
+#bear-container {
+    grid-area: bear;
+    height: 500px;
+    border-right: solid #e4e4e6 2px;
+    border-bottom: solid #e4e4e6 2px;
+}
+
+#timer-div {
+    grid-area: timer;
+    height: 157px;
+    border-right: solid #e4e4e6 2px;
+    border-bottom: solid #e4e4e6 2px;
+}
+
+#bear-activity-container {
+    grid-area: activity;
+    height: 300px;
+    border-right: solid #e4e4e6 2px;
+    border-bottom: solid #e4e4e6 2px;
+}
+
+body {
+    display: grid;
+    grid-template-areas:
+        "login"
+        "bears"
+        "bear"
+        "activity"
+        "timer";
+    font-family: Gill Sans Extrabold, sans-serif;
+}
+
+@media (min-width: 700px) {
+    body {
+        grid-template-columns: 1fr 2fr 3fr;
+        grid-template-areas: 
+        "login  login   login"
+        "bears  bear    activity"
+        "bears  bear   timer"
+    }
+}
