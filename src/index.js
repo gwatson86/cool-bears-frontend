@@ -60,7 +60,9 @@ function addEventListeners() {
             index = 0;
             centiseconds = 0;
             stopTimer();
-            renderTimer();
+            // renderTimer();
+            let timer = document.getElementById('timer-div');
+            timer.innerHTML = '';
         }
         
         if (event.target.id === 'phrase-submit-button') {
