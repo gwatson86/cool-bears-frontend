@@ -60,14 +60,20 @@ document.addEventListener('click', (event) => {
             renderBearActivityContainer(bearId)
         } else {
             stopTimer();
-            bearActivityDiv.innerHTML = `Oh no! You were eaten by ${findBearName(bearId)}!`
+            bearActivityDiv.innerHTML = `Oh no! You were eaten by ${findBearName(bearId)}!`;
+            hooman.eaten = true;
+            updateEatenStatus(hooman.id);
         }
     }
 
     if (event.target.id === 'play-button') {
-        let bearId = event.target.dataset.id;
-        renderBearActivityContainer(bearId);
-        renderTimer();
+        if (hooman.eaten) {
+            alert("Dis hooman eat by bear. No play no mor.")
+        } else {
+            let bearId = event.target.dataset.id;
+            renderBearActivityContainer(bearId);
+            renderTimer();
+        }
     }
 
 })
@@ -250,4 +256,22 @@ function compareAndSetTime(seconds, id) {
             }
         })
     }
+}
+
+function updateEatenStatus(id) {
+    fetch(`${URL}/hoomen/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({eaten: true}),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+function clearDivs() {
+    bearsDiv.innerHTML = '';
+    bearContainerDiv.innerHTML = '';
+    bearActivityDiv.innerHTML = '';
+    timerDiv.innerHTML = '';
 }
