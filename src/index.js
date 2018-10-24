@@ -2,6 +2,9 @@ hoomanName = '';
 hooman = null;
 centiseconds = 0;
 setInt = null;
+bears = [];
+hoomen = [];
+activities = [];
 
 URL = 'http://localhost:3000';
 
@@ -11,84 +14,93 @@ document.addEventListener('DOMContentLoaded', () => {
     bearContainerDiv = document.getElementById('bear-container');
     bearActivityDiv = document.getElementById('bear-activity-container');
     timerDiv = document.getElementById('timer-div');
+    fetchData('bears').then(b => bears = b).then(addEventListeners);
+    fetchData('hoomen').then(h => hoomen = h);
+    fetchData('activities').then(a => activities = a);
     renderLogin();
 })
 
-document.addEventListener('click', (event) => {
-    event.preventDefault();
-
-    if (event.target.id === 'login-button') {
-        name = document.getElementById('hooman-name').value
-        hoomanName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() ;
-
-        if (hoomanName.includes(' ')) {
-            alert('Username cannot include spaces!');
-            document.getElementById('hooman-name').value = '';
-        } else if (hoomanName === '') {
-            alert('Username cannot be blank!');
-        } else {
-            findOrCreateHooman(hoomanName);
-            renderWelcome();
-            getBears();
-        }
-    }
-
-    if (event.target.id === 'logout-button') {
-        hoomanName = '';
-        renderLogin();
-        bearsDiv.innerHTML = '';
-        bearContainerDiv.innerHTML = '';
-        bearActivityDiv.innerHTML = '';
-        timerDiv.innerHTML = '';
-    }
-
-    if (event.target.className === 'bears-list') {
-        let bearId = event.target.dataset.id;
-        renderBearContainer(bearId);
-        renderInstructions(bearId);
-        index = 0;
-        centiseconds = 0;
-        stopTimer();
-        renderTimer();
-    }
+function addEventListeners() {
+    document.addEventListener('click', (event) => {
+        event.preventDefault();
     
-    if (event.target.id === 'phrase-submit-button') {
-        let bearId = event.target.dataset.id;
-        let phraseInput = document.getElementById('phrase-input').value
-        if (comparePhrase(phraseInput, bearId)) {
-            index++;
-            renderBearActivityContainer(bearId)
-        } else {
-            stopTimer();
-            bearActivityDiv.innerHTML = `Oh no! You were eaten by ${findBearName(bearId)}!`
+        if (event.target.id === 'login-button') {
+            name = document.getElementById('hooman-name').value
+            hoomanName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() ;
+    
+            if (hoomanName.includes(' ')) {
+                alert('Username cannot include spaces!');
+                document.getElementById('hooman-name').value = '';
+            } else if (hoomanName === '') {
+                alert('Username cannot be blank!');
+            } else {
+                findOrCreateHooman(hoomanName);
+                renderWelcome();
+                renderBears(bears);
+            }
         }
-    }
-
-    if (event.target.id === 'play-button') {
-        let bearId = event.target.dataset.id;
-        renderBearActivityContainer(bearId);
-        renderTimer();
-    }
-
-})
-
-function findOrCreateHooman(name) {
-    let fixedName = name;
-    fetch(`${URL}/hoomen`)
-    .then(response => response.json())
-    .then(json => {
-        hoomen = json;
-        let foundHooman = hoomen.find(hooman => {
-            return hooman.name === fixedName
-        })
-
-        if (foundHooman === undefined) {
-            createNewHooman(fixedName);
-        } else {
-            hooman = foundHooman;
+    
+        if (event.target.id === 'logout-button') {
+            hoomanName = '';
+            renderLogin();
+            bearsDiv.innerHTML = '';
+            bearContainerDiv.innerHTML = '';
+            bearActivityDiv.innerHTML = '';
+            timerDiv.innerHTML = '';
+        }
+    
+        if (event.target.className === 'bears-list') {
+            let bearId = event.target.dataset.id;
+            renderBearContainer(bearId);
+            renderInstructions(bearId);
+            index = 0;
+            centiseconds = 0;
+            stopTimer();
+            renderTimer();
+        }
+        
+        if (event.target.id === 'phrase-submit-button') {
+            let bearId = event.target.dataset.id;
+            let phraseInput = document.getElementById('phrase-input').value
+            if (comparePhrase(phraseInput, bearId)) {
+                index++;
+                renderBearActivityContainer(bearId)
+            } else {
+                stopTimer();
+                bearActivityDiv.innerHTML = `Oh no! You were eaten by ${findBearName(bearId)}!`
+            }
+        }
+    
+        if (event.target.id === 'play-button') {
+            if (hooman.eaten) {
+                alert("Dis hooman eat by bear. No play no mor.")
+            } else {
+                let bearId = event.target.dataset.id;
+                renderBearActivityContainer(bearId);
+                renderTimer();
+            }
         }
     })
+}
 
+function fetchData(route) {
+    return fetch(`${URL}/${route}`)
+    .then(response => response.json())
+    .then(json => {
+        return json;
+    })
+}
+
+function findOrCreateHooman(name) {
+    let foundHooman = hoomen.find(hooman => {
+        return hooman.name === name
+    })
+
+    if (foundHooman === undefined) {
+        createNewHooman(name);
+    } else {
+        hooman = foundHooman;
+    }
 }
 
 function renderLogin() {
@@ -101,15 +113,6 @@ function renderLogin() {
 
 function renderWelcome() {
     loginDiv.innerHTML = `Welcome, ${hoomanName}! <button id="logout-button">Logout</button>`
-}
-
-function getBears() {
-    fetch(`${URL}/bears`)
-    .then(response => response.json())
-    .then(json => {
-        bears = json;
-        renderBears(bears)
-    })
 }
 
 function renderBears(bears) {
@@ -169,35 +172,29 @@ function renderInstructions(id) {
 }
 
 function renderBearActivityContainer(id) {
-    fetch(`${URL}/activities`)
-    .then(response => response.json())
-    .then(json => {
-        activities = json;
-
-        if (index < activities.length) {
-            if (index === 0) {
-                startTimer();
-            }
-
-            activity = activities[index]
-            let specificBearPhrase = activity.phrase.replace("BEAR", findBearName(id))
-            bearActivityDiv.innerHTML = 
-                `<p>${activity.name}</p>
-                <p>${specificBearPhrase}</p>
-                <form>
-                    <input id="phrase-input">
-                    <button id="phrase-submit-button" data-id="${id}">Submit</button>
-                    
-                </form>`
-        } else {
-            stopTimer();
-            let seconds = centiseconds/100;
-            bearActivityDiv.innerHTML = 
-                `<p>Activities Completed!</p>
-                <p>Your time: ${seconds} seconds</p>`
-            compareAndSetTime(seconds, id);
+    if (index < activities.length) {
+        if (index === 0) {
+            startTimer();
         }
-    })
+
+        activity = activities[index]
+        let specificBearPhrase = activity.phrase.replace("BEAR", findBearName(id))
+        bearActivityDiv.innerHTML = 
+            `<p>${activity.name}</p>
+            <p>${specificBearPhrase}</p>
+            <form>
+                <input id="phrase-input">
+                <button id="phrase-submit-button" data-id="${id}">Submit</button>
+                
+            </form>`
+    } else {
+        stopTimer();
+        let seconds = centiseconds/100;
+        bearActivityDiv.innerHTML = 
+            `<p>Activities Completed!</p>
+            <p>Your time: ${seconds} seconds</p>`
+        compareAndSetTime(seconds, id);
+    }
 }
 
 function findBearName(id) {
