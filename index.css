@@ -2,18 +2,21 @@ img {
     max-width: 300px;
 }
 
-div {
-    padding: 20px;
-}
-
 .bears-list{
     cursor: pointer;
+    padding: 10px;
+}
+
+.bears-list:hover{
+    color: #4b6055;
+    background-color:rgba(75, 96, 85, 0.25);
 }
 
 #login {
     grid-area: login;
     color: #ffffff;
     background-color: #10313b;
+    padding: 10px;
 }
 
 #bears {
@@ -26,20 +29,22 @@ div {
     height: 500px;
     border-right: solid #e4e4e6 2px;
     border-bottom: solid #e4e4e6 2px;
+    padding:10px;
 }
 
 #timer-div {
     grid-area: timer;
-    height: 157px;
+    height: 180px;
     border-right: solid #e4e4e6 2px;
     border-bottom: solid #e4e4e6 2px;
+    padding: 10px;
 }
 
 #bear-activity-container {
     grid-area: activity;
     height: 300px;
     border-right: solid #e4e4e6 2px;
-    border-bottom: solid #e4e4e6 2px;
+    padding: 10px;
 }
 
 body {
@@ -55,7 +60,7 @@ body {
 
 @media (min-width: 700px) {
     body {
-        grid-template-columns: 1fr 2fr 3fr;
+        grid-template-columns: 1fr 2fr 2fr;
         grid-template-areas: 
         "login  login   login"
         "bears  bear    activity"
