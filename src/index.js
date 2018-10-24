@@ -49,9 +49,9 @@ function addEventListeners() {
             timerDiv.innerHTML = '';
         }
 
-        if (event.target.id === 'favorite-hoomen') {
+        if (event.target.className === 'favorite-hoomen') {
             renderChart();
-        } 
+        }
     
         if (event.target.className === 'bears-list') {
             let bearId = event.target.dataset.id;
@@ -123,13 +123,11 @@ function renderWelcome() {
 
 function renderBears(bears) {
     bearsDiv.innerHTML += 
-        `<div class="bears-list" data-id="0"><b>Favorite Hoomen</b></div><hr>`
+        `<div class="favorite-hoomen" data-id="0">Favorite Hoomen</div><hr>`
 
     bears.forEach((bear) => {
         bearsDiv.innerHTML += `<div class="bears-list" data-id="${bear.id}">${bear.name}</div>`
-    })
-
-    renderChart()    
+    })   
 }
 
 function renderBearContainer(id) {
@@ -294,7 +292,7 @@ function renderChart() {
 
     bearContainerDiv.innerHTML = 
         `<div><b>Favorite Hoomen</b></div>
-        <canvas id="chart" width="400" height="300"></canvas>`;
+        <canvas id="chart" width="500" height="300"></canvas>`;
 
     var myChart = new Chart(document.getElementById('chart'), {
         type: 'bar',
@@ -316,21 +314,23 @@ function renderChart() {
                     ticks: {
                         beginAtZero:true,
                         fixedStepSize: 1,
-                        fontSize: 20,
+                        fontSize: 10,
                     },
                     scaleLabel: {
                       display: true,
-                      labelString: 'Bears'
+                      labelString: 'Bears',
+                      fontSize: 20
                     }
                 }],
 
                 xAxes: [{
                     ticks: {
-                        fontSize: 20
+                        fontSize: 10
                     },
                   scaleLabel: {
                     display: true,
-                    labelString: 'Hooman'
+                    labelString: 'Hooman',
+                    fontSize: 20
                   }
                 }]
             },

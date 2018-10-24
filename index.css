@@ -2,6 +2,16 @@ img {
     max-width: 300px;
 }
 
+.favorite-hoomen {
+    cursor: pointer;
+    padding: 10px;
+}
+
+.favorite-hoomen:hover {
+    color: #4b6055;
+    background-color:rgba(75, 96, 85, 0.25);
+}
+
 .bears-list{
     cursor: pointer;
     padding: 10px;
@@ -60,7 +70,7 @@ body {
 
 @media (min-width: 700px) {
     body {
-        grid-template-columns: 1fr 2fr 2fr;
+        grid-template-columns: 1fr 2.5fr 2.5fr;
         grid-template-areas: 
         "login  login   login"
         "bears  bear    activity"
