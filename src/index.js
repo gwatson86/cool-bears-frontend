@@ -176,8 +176,11 @@ function findHooman(id) {
 
 function renderInstructions(id) {
     bearActivityDiv.innerHTML = 
-        `<p>Instructions</p>
-        <p>Instruction paragraph.</p>
+        `<p>Want to be ${findBearName(id)}'s favorite Hooman?
+        Play with ${findBearName(id)}, a dangerous wild animal! What could possibly go wrong?</p>
+        <p>${findBearName(id)} is very particular about playtime. 
+        Make sure you type each command exactly as shown!</p>
+        Click 'Play' to begin and the timer will start.</p>
         <button id="play-button" data-id="${id}">Play!</button>`
 }
 
