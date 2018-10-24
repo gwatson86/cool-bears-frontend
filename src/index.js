@@ -48,6 +48,10 @@ function addEventListeners() {
             bearActivityDiv.innerHTML = '';
             timerDiv.innerHTML = '';
         }
+
+        if (event.target.id === 'favorite-hoomen') {
+            renderChart();
+        } 
     
         if (event.target.className === 'bears-list') {
             let bearId = event.target.dataset.id;
@@ -161,6 +165,7 @@ function createNewHooman(hoomanName) {
     .then(response => response.json())
     .then(response => {
         hooman = response;
+        hoomen.push(hooman);
     })
 }
 
