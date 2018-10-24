@@ -48,7 +48,7 @@ function addEventListeners() {
             bearActivityDiv.innerHTML = '';
             timerDiv.innerHTML = '';
         }
-        
+
         if (event.target.className === 'favorite-hoomen') {
             renderChart();
         }
@@ -163,6 +163,7 @@ function createNewHooman(hoomanName) {
     .then(response => response.json())
     .then(response => {
         hooman = response;
+        hoomen.push(hooman);
     })
 }
 
@@ -291,7 +292,7 @@ function renderChart() {
 
     bearContainerDiv.innerHTML = 
         `<div><b>Favorite Hoomen</b></div>
-        <canvas id="chart" width="400" height="300"></canvas>`;
+        <canvas id="chart" width="500" height="300"></canvas>`;
 
     var myChart = new Chart(document.getElementById('chart'), {
         type: 'bar',
@@ -313,21 +314,23 @@ function renderChart() {
                     ticks: {
                         beginAtZero:true,
                         fixedStepSize: 1,
-                        fontSize: 20,
+                        fontSize: 10,
                     },
                     scaleLabel: {
                       display: true,
-                      labelString: 'Bears'
+                      labelString: 'Bears',
+                      fontSize: 20
                     }
                 }],
 
                 xAxes: [{
                     ticks: {
-                        fontSize: 20
+                        fontSize: 10
                     },
                   scaleLabel: {
                     display: true,
-                    labelString: 'Hooman'
+                    labelString: 'Hooman',
+                    fontSize: 20
                   }
                 }]
             },

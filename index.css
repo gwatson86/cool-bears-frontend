@@ -70,7 +70,7 @@ body {
 
 @media (min-width: 700px) {
     body {
-        grid-template-columns: 1fr 2fr 2fr;
+        grid-template-columns: 1fr 2.5fr 2.5fr;
         grid-template-areas: 
         "login  login   login"
         "bears  bear    activity"
