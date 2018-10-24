@@ -113,9 +113,14 @@ function getBears() {
 }
 
 function renderBears(bears) {
+    bearsDiv.innerHTML += 
+        `<div class="bears-list" data-id="0"><b>Favorite Hoomen</b></div><hr>`
+
     bears.forEach((bear) => {
-        bearsDiv.innerHTML += `<p class="bears-list" data-id="${bear.id}">${bear.name}</p><hr>`
+        bearsDiv.innerHTML += `<div class="bears-list" data-id="${bear.id}">${bear.name}</div>`
     })
+
+    renderChart()    
 }
 
 function renderBearContainer(id) {
@@ -250,4 +255,72 @@ function compareAndSetTime(seconds, id) {
             }
         })
     }
+}
+
+function renderChart() {
+    
+    const favoriteHoomen = {}
+    bears.forEach((bear) => {
+        if (Object.keys(favoriteHoomen).includes(bear.hooman_id.toString())) {
+            favoriteHoomen[bear.hooman_id] = favoriteHoomen[bear.hooman_id] + 1;
+        } else {
+            favoriteHoomen[bear.hooman_id] = 1;
+        }
+    })
+
+    favoriteHoomenNames = Object.keys(favoriteHoomen).map(id => {
+
+        let foundHooman = hoomen.find(hooman => {
+            return parseInt(hooman.id) === parseInt(id);
+        })
+
+        return foundHooman.name
+    })
+
+    bearContainerDiv.innerHTML = 
+        `<div><b>Favorite Hoomen</b></div>
+        <canvas id="chart" width="400" height="300"></canvas>`;
+
+    var myChart = new Chart(document.getElementById('chart'), {
+        type: 'bar',
+        data: {
+            labels: favoriteHoomenNames,
+            datasets: [{
+                label: 'Bears',
+                data: Object.values(favoriteHoomen),
+                backgroundColor:
+                    'rgba(75, 96, 85, 0.25)',
+                borderColor:
+                    'rgba(75, 96, 85, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true,
+                        fixedStepSize: 1,
+                        fontSize: 20,
+                    },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Bears'
+                    }
+                }],
+
+                xAxes: [{
+                    ticks: {
+                        fontSize: 20
+                    },
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Hooman'
+                  }
+                }]
+            },
+            responsive: false,
+            maintainAspectRatio: true
+        }
+    });
 }
