@@ -2,6 +2,16 @@ img {
     max-width: 300px;
 }
 
+.favorite-hoomen {
+    cursor: pointer;
+    padding: 10px;
+}
+
+.favorite-hoomen:hover {
+    color: #4b6055;
+    background-color:rgba(75, 96, 85, 0.25);
+}
+
 .bears-list{
     cursor: pointer;
     padding: 10px;

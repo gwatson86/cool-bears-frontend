@@ -48,6 +48,10 @@ function addEventListeners() {
             bearActivityDiv.innerHTML = '';
             timerDiv.innerHTML = '';
         }
+        
+        if (event.target.className === 'favorite-hoomen') {
+            renderChart();
+        }
     
         if (event.target.className === 'bears-list') {
             let bearId = event.target.dataset.id;
@@ -119,13 +123,11 @@ function renderWelcome() {
 
 function renderBears(bears) {
     bearsDiv.innerHTML += 
-        `<div class="bears-list" data-id="0"><b>Favorite Hoomen</b></div><hr>`
+        `<div class="favorite-hoomen" data-id="0">Favorite Hoomen</div><hr>`
 
     bears.forEach((bear) => {
         bearsDiv.innerHTML += `<div class="bears-list" data-id="${bear.id}">${bear.name}</div>`
-    })
-
-    renderChart()    
+    })   
 }
 
 function renderBearContainer(id) {
