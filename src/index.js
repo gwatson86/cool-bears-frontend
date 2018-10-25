@@ -226,6 +226,7 @@ function renderInstructions(id) {
 }
 
 function renderBearActivityContainer(id) {
+    console.log("renderding activity container")
     if (index < id) {
         if (index === 0) {
             shuffle(activities);
@@ -237,16 +238,17 @@ function renderBearActivityContainer(id) {
         bearActivityDiv.innerHTML = 
             `<h3>${activity.name}</h3>
             <p class="noselect">${specificBearPhrase}</p>
-            <form>
-                <input size="40px" id="phrase-input"><br><br>
+            <form id="phrase-form">
+                <input size="40px" autofocus="autofocus" id="phrase-input"><br><br>
                 <button id="phrase-submit-button" data-id="${id}">Submit</button>
             </form>`
+        document.getElementById('phrase-input').focus();
     } else {
         stopTimer();
         let seconds = centiseconds/100;
         bearActivityDiv.innerHTML = 
-            `<p>Activities Completed!</p>
-            <p>Your time: ${seconds} seconds</p>`
+            `<center><h3>Activities Completed!</h3></center>
+            <center><p>Your time: ${seconds} seconds</p></center>`
         compareAndSetTime(seconds, id);
     }
 }
@@ -292,6 +294,8 @@ function compareAndSetTime(seconds, id) {
         let fastestTime = document.getElementById('fastest-time');
         favoriteHooman.innerHTML = `<img class="icon" src="../cool-bears-backend/app/assets/images/heart-icon.png">: ${hooman.name}`;
         fastestTime.innerHTML = `<img class="icon" src="../cool-bears-backend/app/assets/images/time-icon.jpg">: ${seconds} s`;
+        bearActivityDiv.innerHTML += `<p>Your foolish frolicking with ${bear.name} was fast enough to fortify you as ${bear.name}'s favorite friend! Congratulations!</p>
+                                      <p>You beat the previous time by ${(bear.top_time - seconds).toFixed(2)} seconds!`
         bear.hooman_id = hooman.id;
         bear.top_time = seconds;
 
@@ -307,6 +311,9 @@ function compareAndSetTime(seconds, id) {
                 'Content-Type': 'application/json'
             }
         })
+    } else {
+        bearActivityDiv.innerHTML += `<p>You were too slow by ${(seconds - bear.top_time).toFixed(2)} seconds!</p>
+                                      <p>Next time, play with ${bear.name} faster and more recklessly!`
     }
 }
 
@@ -417,10 +424,12 @@ function renderHangriestBearsChart() {
     
     const hangriestBears = {}
     hoomen.forEach((hooman) => {
-        if (Object.keys(hangriestBears).includes(hooman.eaten_by)) {
-            hangriestBears[hooman.eaten_by] = hangriestBears[hooman.eaten_by] + 1;
-        } else {
-            hangriestBears[hooman.eaten_by] = 1;
+        if (hooman.eaten_by !== "") {
+            if (Object.keys(hangriestBears).includes(hooman.eaten_by)) {
+                hangriestBears[hooman.eaten_by] = hangriestBears[hooman.eaten_by] + 1;
+            } else {
+                hangriestBears[hooman.eaten_by] = 1;
+            }
         }
     })
 
