@@ -71,7 +71,8 @@ function addEventListeners() {
                 renderBearActivityContainer(bearId)
             } else {
                 stopTimer();
-                bearActivityDiv.innerHTML = `Oh no! You were eaten by ${findBearName(bearId)}!`
+                bearActivityDiv.innerHTML = `<p>Oh no! You were eaten by ${findBearName(bearId)}!</p>`
+                bearContainerDiv.children[0].src = `../cool-bears-backend/app/assets/images/${findBear(bearId).eaten_image}`
                 hooman.eaten = true;
                 updateEatenStatus(hooman.id);
             }
@@ -131,12 +132,10 @@ function renderBears(bears) {
 }
 
 function renderBearContainer(id) {
-    const bear = bears.find(bear => {
-        return bear.id === parseInt(id);
-    })
+    const bear = findBear(id);
 
     bearContainerDiv.innerHTML = 
-        `<img src=${bear.image_url}>
+        `<img src="../cool-bears-backend/app/assets/images/${bear.image_url}">
         <p>Name: ${bear.name}</p>
         <p>Species: ${bear.species}</p>
         <p>Nationality: ${bear.nationality}</p>
@@ -212,6 +211,13 @@ function findBearName(id) {
         return bear.id === parseInt(id);
     })
     return foundBear.name;
+}
+
+function findBear(id) {
+    let foundBear = bears.find(bear => {
+        return bear.id === parseInt(id);
+    })
+    return foundBear;
 }
 
 function comparePhrase(inputPhrase, id) {

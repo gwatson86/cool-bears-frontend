@@ -1,5 +1,5 @@
 img {
-    max-width: 300px;
+    max-width: 600px;
 }
 
 .favorite-hoomen {
@@ -36,7 +36,7 @@ img {
 
 #bear-container {
     grid-area: bear;
-    height: 500px;
+    /* height: 500px; */
     border-right: solid #e4e4e6 2px;
     border-bottom: solid #e4e4e6 2px;
     padding:10px;
@@ -44,7 +44,7 @@ img {
 
 #timer-div {
     grid-area: timer;
-    height: 180px;
+    /* height: 180px; */
     border-right: solid #e4e4e6 2px;
     border-bottom: solid #e4e4e6 2px;
     padding: 10px;
@@ -52,7 +52,7 @@ img {
 
 #bear-activity-container {
     grid-area: activity;
-    height: 300px;
+    /* height: 300px; */
     border-right: solid #e4e4e6 2px;
     padding: 10px;
 }
