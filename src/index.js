@@ -50,21 +50,46 @@ function addEventListeners() {
             timerDiv.innerHTML = '';
         }
 
-        if (event.target.className === 'favorite-hoomen') {
+        if (event.target.id === 'favorite-hoomen') {
             if (activeButton)
-                activeButton.classList.remove("highlighted")
+            activeButton.classList.remove("highlighted")
             activeButton = event.target
             activeButton.classList.add("highlighted")
-            renderChart();
+            renderFavoriteHoomenChart();
+        }
+
+        if (event.target.id === 'hangriest-bears') {
+            if (activeButton)
+            activeButton.classList.remove("highlighted")
+            activeButton = event.target
+            activeButton.classList.add("highlighted")
+            renderHangriestBearsChart();
         }
     
-        if (event.target.className === 'bears-list') {
-            if (activeButton)
-                activeButton.classList.remove("highlighted")
-            activeButton = event.target
-            activeButton.classList.add("highlighted")
+        if (event.target.className === 'bears-list' || event.target.className === 'bears-list highlighted') {
+            
+            if (activeButton) {
+                activeButton.classList.remove("highlighted");
+            }
+            activeButton = event.target;
+            activeButton.classList.add("highlighted");
+            let bearId = activeButton.dataset.id;
+            renderBearContainer(bearId);
+            renderInstructions(bearId);
+            index = 0;
+            centiseconds = 0;
+            stopTimer();
+            let timer = document.getElementById('timer-div');
+            timer.innerHTML = '';
+        }
 
-            let bearId = event.target.dataset.id;
+        if (event.target.className === 'bears-thumbnail') {
+            if (activeButton) {
+                activeButton.classList.remove("highlighted");
+            }
+            activeButton = event.target.parentNode;
+            activeButton.classList.add("highlighted");
+            let bearId = activeButton.dataset.id;
             renderBearContainer(bearId);
             renderInstructions(bearId);
             index = 0;
@@ -82,16 +107,21 @@ function addEventListeners() {
                 renderBearActivityContainer(bearId)
             } else {
                 stopTimer();
-                bearActivityDiv.innerHTML = `<p>Oh no! You were eaten by ${findBearName(bearId)}!</p>`
+                bearActivityDiv.innerHTML = 
+                    `<h3>Oh no! You screwed it up and now ${findBearName(bearId)} ate you!</h3>
+                    <h4>Correct answer: ${activities[index].phrase.replace(/BEAR/g, findBearName(bearId))}</h4>
+                    <h4>Your answer: &emsp; &emsp; ${phraseInput}</h4>`
                 bearContainerDiv.children[0].src = `../cool-bears-backend/app/assets/images/${findBear(bearId).eaten_image}`
                 hooman.eaten = true;
+                hooman.eaten_by = findBearName(bearId);
                 updateEatenStatus(hooman.id);
+                updateEatenByStatus(hooman.id, bearId);
             }
         }
     
         if (event.target.id === 'play-button') {
             if (hooman.eaten) {
-                alert("Dis hooman eat by bear. No play no mor.")
+                alert(`Dis hooman eat by ${hooman.eaten_by}. No play no mor.`)
             } else {
                 let bearId = event.target.dataset.id;
                 renderBearActivityContainer(bearId);
@@ -135,7 +165,8 @@ function renderWelcome() {
 
 function renderBears(bears) {
     bearsDiv.innerHTML += 
-        `<div class="favorite-hoomen" data-id="0">Favorite Hoomen</div><hr>`
+        `<div id="favorite-hoomen">Favorite Hoomen</div>
+        <div id="hangriest-bears">Hangriest Bears</div><hr>`
 
     bears.forEach((bear) => {
         bearsDiv.innerHTML += `<div class="bears-list" data-id="${bear.id}"><img class="bears-thumbnail" src="../cool-bears-backend/app/assets/images/${bear.image_url}"> ${bear.name}</div>`
@@ -157,8 +188,8 @@ function renderBearContainer(id) {
 function renderTimer() {
     let timer = document.getElementById('timer-div');
     timer.innerHTML = 
-        `<h2>Timer</h2>
-        <h2 id='timer'>${centiseconds}</h2>`
+        `<center><h3>Timer</h3>
+        <h1 id='timer'>${(centiseconds/100).toFixed(2)}</h1></center>`
 }
 
 function createNewHooman(hoomanName) {
@@ -195,20 +226,20 @@ function renderInstructions(id) {
 }
 
 function renderBearActivityContainer(id) {
-    if (index < activities.length) {
+    if (index < id) {
         if (index === 0) {
+            shuffle(activities);
             startTimer();
         }
 
-        activity = activities[index]
-        let specificBearPhrase = activity.phrase.replace("BEAR", findBearName(id))
+        activity = activities[index];
+        let specificBearPhrase = activity.phrase.replace(/BEAR/g, findBearName(id))
         bearActivityDiv.innerHTML = 
             `<h3>${activity.name}</h3>
-            <p>${specificBearPhrase}</p>
+            <p class="noselect">${specificBearPhrase}</p>
             <form>
-                <input id="phrase-input">
+                <input size="40px" id="phrase-input"><br><br>
                 <button id="phrase-submit-button" data-id="${id}">Submit</button>
-                
             </form>`
     } else {
         stopTimer();
@@ -235,7 +266,7 @@ function findBear(id) {
 }
 
 function comparePhrase(inputPhrase, id) {
-    return activities[index].phrase.replace("BEAR", findBearName(id)) === inputPhrase;
+    return activities[index].phrase.replace(/BEAR/g, findBearName(id)) === inputPhrase;
 }
 
 function startTimer() {
@@ -243,7 +274,7 @@ function startTimer() {
     function increaseTime() {
         let timer = document.getElementById('timer')
         centiseconds += 1;
-        timer.innerText = `${centiseconds/100}`;
+        timer.innerText = `${(centiseconds/100).toFixed(2)}`;
     }
 }
 
@@ -259,8 +290,8 @@ function compareAndSetTime(seconds, id) {
     if (bear.top_time > seconds) {
         let favoriteHooman = document.getElementById('favorite-hooman');
         let fastestTime = document.getElementById('fastest-time');
-        favoriteHooman.innerText = `Favorite Hooman: ${hooman.name}`;
-        fastestTime.innerText = `Fastest Time: ${seconds} s`;
+        favoriteHooman.innerHTML = `<img class="icon" src="../cool-bears-backend/app/assets/images/heart-icon.png">: ${hooman.name}`;
+        fastestTime.innerHTML = `<img class="icon" src="../cool-bears-backend/app/assets/images/time-icon.jpg">: ${seconds} s`;
         bear.hooman_id = hooman.id;
         bear.top_time = seconds;
 
@@ -290,7 +321,27 @@ function updateEatenStatus(id) {
     })
 }
 
-function renderChart() {
+function updateEatenByStatus(id, bearId) {
+    let data = {eaten_by: findBearName(bearId)}
+    fetch(`${URL}/hoomen/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function renderFavoriteHoomenChart() {
     
     const favoriteHoomen = {}
     bears.forEach((bear) => {
@@ -313,7 +364,7 @@ function renderChart() {
     bearActivityDiv.innerHTML = '';
     timerDiv.innerHTML = '';
     bearContainerDiv.innerHTML = 
-        `<div><h3>Favorite Hoomen</h3></div>
+        `<div><center><h3>Favorite Hoomen</h3></center></div>
         <canvas id="chart" width="450" height="300"></canvas>`;
 
     var myChart = new Chart(document.getElementById('chart'), {
@@ -352,6 +403,69 @@ function renderChart() {
                   scaleLabel: {
                     display: true,
                     labelString: 'Hooman',
+                    fontSize: 20
+                  }
+                }]
+            },
+            responsive: false,
+            maintainAspectRatio: true
+        }
+    });
+}
+
+function renderHangriestBearsChart() {
+    
+    const hangriestBears = {}
+    hoomen.forEach((hooman) => {
+        if (Object.keys(hangriestBears).includes(hooman.eaten_by)) {
+            hangriestBears[hooman.eaten_by] = hangriestBears[hooman.eaten_by] + 1;
+        } else {
+            hangriestBears[hooman.eaten_by] = 1;
+        }
+    })
+
+    bearActivityDiv.innerHTML = '';
+    timerDiv.innerHTML = '';
+    bearContainerDiv.innerHTML = 
+        `<div><center><h3>Hangriest Bears</h3></center></div>
+        <canvas id="chart" width="450" height="300"></canvas>`;
+
+    var myChart = new Chart(document.getElementById('chart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(hangriestBears),
+            datasets: [{
+                label: 'Hoomen Eaten',
+                data: Object.values(hangriestBears),
+                backgroundColor:
+                    'rgba(75, 96, 85, 0.25)',
+                borderColor:
+                    'rgba(75, 96, 85, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true,
+                        fixedStepSize: 1,
+                        fontSize: 10,
+                    },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Hoomen Eaten',
+                      fontSize: 20
+                    }
+                }],
+
+                xAxes: [{
+                    ticks: {
+                        fontSize: 10
+                    },
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Bear',
                     fontSize: 20
                   }
                 }]

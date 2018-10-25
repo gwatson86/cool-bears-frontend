@@ -52,13 +52,13 @@ button:hover {
     float: right;
 }
 
-.favorite-hoomen, .bears-list {
+#favorite-hoomen, #hangriest-bears, .bears-list {
     cursor: pointer;
     padding: 10px;
     vertical-align: middle;
 }
 
-.favorite-hoomen:hover, .bears-list:hover {
+#favorite-hoomen:hover, #hangriest-bears:hover, .bears-list:hover {
     color: #4b6055;
     background-color: #ccd1ce;
 }
@@ -112,6 +112,16 @@ button:hover {
     border-bottom: solid #e4e4e6 1px;
     border-radius: 5px;
     padding: 20px;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
 }
 
 body {
