@@ -1,79 +1,138 @@
 img {
-    max-width: 300px;
+    max-width: 100%;
 }
 
-.favorite-hoomen {
+input {
+    padding: 5px 5px;
+    border: 1px solid #10313b;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+input:focus {
+    background-color: #f7f7f7;
+}
+
+button {
+    padding: 5px 5px;
+    width: 100px;
+    color: #10313b;
+    background-color:#72867b;
+    border: 1px solid #10313b;
+    border-radius: 5px;
+    font-size: 20px;
     cursor: pointer;
+}
+
+button:hover {
+    color: #4b6055;
+    background-color: #ccd1ce;
+}
+
+#bar {
+    grid-area: bar;
+    color: #f7f7f7;
+    background-color: #4b6055;
+    border-bottom: solid #e4e4e6 1px;
     padding: 10px;
 }
 
-.favorite-hoomen:hover {
-    color: #4b6055;
-    background-color:rgba(75, 96, 85, 0.25);
+#bar-icon {
+    max-height: 35px;
+    vertical-align: middle;
 }
 
-.bears-list{
-    cursor: pointer;
-    padding: 10px;
-}
-
-.bears-list:hover{
-    color: #4b6055;
-    background-color:rgba(75, 96, 85, 0.25);
+#bar-title {
+    font-size: 24px;
+    font-weight: bold;
+    vertical-align: middle;
 }
 
 #login {
-    grid-area: login;
-    color: #ffffff;
-    background-color: #10313b;
+    float: right;
+}
+
+.favorite-hoomen, .bears-list {
+    cursor: pointer;
     padding: 10px;
+    vertical-align: middle;
+}
+
+.favorite-hoomen:hover, .bears-list:hover {
+    color: #4b6055;
+    background-color: #ccd1ce;
+}
+
+.highlighted {
+    color: #4b6055;
+    background-color: #ccd1ce;
+}
+
+.bears-thumbnail {
+    object-fit: cover;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #10313b;
+    border-radius: 50%;
+    vertical-align: middle;
+    
 }
 
 #bears {
     grid-area: bears;
-    background-color: #e4e4e6;
+    background-color: #f7f7f7;
 }
 
 #bear-container {
     grid-area: bear;
-    height: 500px;
-    border-right: solid #e4e4e6 2px;
-    border-bottom: solid #e4e4e6 2px;
-    padding:10px;
+    background-color: #ffffff;
+    border-right: solid #e4e4e6 1px;
+    border-bottom: solid #e4e4e6 1px;
+    border-radius: 5px;
+    padding:20px;
+}
+
+.icon {
+    max-width: 20px;
 }
 
 #timer-div {
     grid-area: timer;
-    height: 180px;
-    border-right: solid #e4e4e6 2px;
-    border-bottom: solid #e4e4e6 2px;
-    padding: 10px;
+    background-color: #ffffff;
+    border-right: solid #e4e4e6 1px;
+    border-bottom: solid #e4e4e6 1px;
+    border-radius: 5px;
+    padding: 20px;
 }
 
 #bear-activity-container {
     grid-area: activity;
-    height: 300px;
-    border-right: solid #e4e4e6 2px;
-    padding: 10px;
+    background-color: #ffffff;
+    border-right: solid #e4e4e6 1px;
+    border-bottom: solid #e4e4e6 1px;
+    border-radius: 5px;
+    padding: 20px;
 }
 
 body {
     display: grid;
     grid-template-areas:
-        "login"
+        "bar"
         "bears"
         "bear"
         "activity"
         "timer";
+    gap: 20px;
     font-family: Gill Sans Extrabold, sans-serif;
+    background-color: #f7f7f7
 }
 
 @media (min-width: 700px) {
     body {
-        grid-template-columns: 1fr 2.5fr 2.5fr;
+        grid-template-columns: 1fr 2.75fr 2.75fr;
         grid-template-areas: 
-        "login  login   login"
-        "bears  bear    activity"
-        "bears  bear   timer"
+        "bar        bar     bar"
+        "bears      bear    activity"
+        "bears      bear    timer"
     }
 }
